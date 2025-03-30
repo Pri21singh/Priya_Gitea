@@ -1,11 +1,38 @@
 ---
-- hosts: localhost
+- name: Deploy MySQL on Kubernetes
+  hosts: localhost
+  gather_facts: false  # Disable gathering facts
   tasks:
-  - name: "Install kubernetes python package"
-    pip:
-      name: kubernetes
-      state: present
-  - name: install mysql
-    kubernetes.core.k8s:
-      state: present
-      src: mysql.yaml
+    - name: Deploy MySQL Helm Chart
+      k8s:
+        state: present
+        definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: mysql
+            namespace: default  # Add the namespace field here
+          spec:
+            replicas: 1
+            selector:
+              matchLabels:
+                app: mysql
+            template:
+              metadata:
+                labels:
+                  app: mysql
+              spec:
+                containers:
+                  - name: mysql
+                    image: mysql:5.6
+                    env:
+                      - name: MYSQL_ROOT_PASSWORD
+                        value: "Software@2025"
+                      - name: MYSQL_DATABASE
+                        value: "gitea"
+                      - name: MYSQL_USER
+                        value: "gitea"
+                      - name: MYSQL_PASSWORD
+                        value: "gitea-password"
+                    ports:
+                      - containerPort: 3306

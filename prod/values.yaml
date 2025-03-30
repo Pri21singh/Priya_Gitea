@@ -1,0 +1,25 @@
+mysql:
+  storageSize: 20Gi
+  rootPassword: "password"
+  database: "gitea"
+  user: "gitea"
+  password: "gitea-password"
+
+gitea:
+  adminUser: "gitea_admin"
+  adminPassword: "password"
+  adminEmail: "singpri21@gmail.com"
+  database:
+    type: "mysql"
+    host: "mysql.default.svc.cluster.local:3306"
+    name: "gitea"
+    user: "gitea"
+    password: "gitea-password"
+  persistence:
+    enabled: true
+    size: 10Gi
+  service:
+    type: ClusterIP
+    port: 3000
+  ssh:
+    port: 22
